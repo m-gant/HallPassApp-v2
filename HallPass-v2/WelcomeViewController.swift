@@ -11,7 +11,7 @@ import Firebase
 
 class WelcomeViewController: UIViewController, SchoolReferenceDataSource {
     
-    let rootRef = FIRDatabase.database().reference(fromURL:"https://hallpass-v2.firebaseio.com/" )
+    let rootRef = FIRDatabase.database().reference()
 
     
     
@@ -34,7 +34,7 @@ class WelcomeViewController: UIViewController, SchoolReferenceDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         HallPassLabelConstraint.constant -= view.bounds.width
-        rootRef.setValue("Schools")
+        rootRef.child("Schools").setValue("nothing")
         
     }
     
@@ -128,6 +128,7 @@ class WelcomeViewController: UIViewController, SchoolReferenceDataSource {
                         print("this happened")
                     } else {
                         //alert
+                        print("this isn't happening")
                     }
                 })
                 //schoolsRef.o
