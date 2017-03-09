@@ -14,7 +14,8 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
     
     var loginSelected: Bool = true
     var registrationSelected = false
-    let rootRef = FIRDatabase.database().reference(fromURL: "https://hallpass-v2.firebaseio.com/")
+    var schoolRef: FIRDatabaseReference? = nil
+    var dataSource: SchoolReferenceDataSource? = nil
 
     @IBOutlet weak var Login_RegistrationBtn: UIButton!
     
@@ -40,6 +41,14 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
         emailTextField.delegate = self
         passwordTextField.delegate = self
         confirmPasswordTextField.delegate = self
+        if dataSource != nil {
+            schoolRef = dataSource!.getSchoolReference()
+        } else {
+            let alert = UIAlertController(title: "Oops", message: "You are not current connected to any school", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {action in
+                self.dismiss(animated: true, completion: nil)
+            }))
+        }
         
         if FIRAuth.auth()?.currentUser?.uid == nil {
             //TODO: Logout
@@ -121,8 +130,15 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
                         guard let userID = user?.uid else {
                             return
                         }
+                        guard let schoolReference = self.schoolRef else {
+                            let alert = UIAlertController(title: "Oops", message: "You are not currently affiliated with any school", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                                self.dismiss(animated: true, completion: nil)
+                            }))
+                            return
+                        }
                         
-                        let teacherRef = self.rootRef.child("teachers").child(userID)
+                        let teacherRef = schoolReference.child("teachers").child(userID)
                         let values = ["name": self.nameTextField.text!, "email": self.emailTextField.text!, "settings": "default", "myStudents":"none"]
                         teacherRef.updateChildValues(values, withCompletionBlock: { (err, ref) in
                             
@@ -182,5 +198,9 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
     
     
 
+}
+
+protocol SchoolReferenceDataSource {
+    func getSchoolReference() -> FIRDatabaseReference?
 }
 
