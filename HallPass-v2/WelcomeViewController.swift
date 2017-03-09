@@ -34,7 +34,7 @@ class WelcomeViewController: UIViewController, SchoolReferenceDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         HallPassLabelConstraint.constant -= view.bounds.width
-        rootRef.child("Schools").setValue("nothing")
+        rootRef.child("Schools")
         
     }
     
