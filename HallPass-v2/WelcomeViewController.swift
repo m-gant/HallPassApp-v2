@@ -35,6 +35,7 @@ class WelcomeViewController: UIViewController, SchoolReferenceDataSource {
         super.viewDidLoad()
         HallPassLabelConstraint.constant -= view.bounds.width
         rootRef.child("Schools")
+        //for branch
         
     }
     
