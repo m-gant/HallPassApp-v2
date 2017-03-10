@@ -10,8 +10,9 @@ import UIKit
 import Firebase
 import QuartzCore
 
-class MenuViewController: UIViewController {
+class MenuViewController: UIViewController, TeacherReferenceDataSource {
     
+    var schoolRef: FIRDatabaseReference?
     var teacherDataSource: TeacherReferenceDataSource?
     var teacherRef: FIRDatabaseReference?
     
@@ -27,6 +28,7 @@ class MenuViewController: UIViewController {
         TeacherNameConstraint.constant -= self.view.bounds.width
         if teacherDataSource != nil {
             teacherRef = teacherDataSource!.getTeacherReference()
+            schoolRef = teacherRef?.parent
             
         } else {
             let alert = UIAlertController(title: "Oops", message: "We don't know who you are! Please log back in.", preferredStyle: .alert)
@@ -51,6 +53,20 @@ class MenuViewController: UIViewController {
         }
         
         // Do any additional setup after loading the view.
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toSettings" {
+            let settingsVC = segue.destination as! SettingsViewController
+            settingsVC.teacherDataSource = self
+        } else {
+            super.prepare(for: segue, sender: self)
+        }
+    }
+    
+    
+    func getTeacherReference() -> FIRDatabaseReference? {
+        return teacherRef
     }
     
     
@@ -80,12 +96,12 @@ class MenuViewController: UIViewController {
             return
         }
     }
+    
+   
 
 }
 
-protocol TeacherReferenceDataSource {
-    func getTeacherReference() -> FIRDatabaseReference?
-}
+
 
 extension UIView {
     

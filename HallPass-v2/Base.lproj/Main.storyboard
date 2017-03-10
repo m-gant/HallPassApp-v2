@@ -466,10 +466,108 @@
                         <outlet property="HelloConstraint" destination="Uao-Yy-Xh9" id="BTY-uj-7mF"/>
                         <outlet property="TeacherNameConstraint" destination="8Sb-OJ-hvO" id="c5q-Bf-g4j"/>
                         <outlet property="teacherNameLabel" destination="6Cc-aL-VnX" id="wlJ-Ua-4vP"/>
+                        <segue destination="ueA-1t-3EK" kind="show" identifier="toSettings" id="flv-a8-usZ"/>
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="800.79999999999995" y="38.23088455772114"/>
+            <point key="canvasLocation" x="769" y="37"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="r9v-hU-bai">
+            <objects>
+                <viewController id="ueA-1t-3EK" customClass="SettingsViewController" customModule="HallPass_v2" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="JZP-Z6-Aqc"/>
+                        <viewControllerLayoutGuide type="bottom" id="gTg-f4-oCP"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="bbJ-Wh-ViX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="grf-vt-ciO">
+                                <rect key="frame" x="91" y="70" width="193" height="75"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="75" id="Ibx-aP-tJT"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="55"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VZj-Jn-Nfx">
+                                <rect key="frame" x="10" y="170" width="355" height="60"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="Ldt-cv-Shk">
+                                        <rect key="frame" x="5" y="0.0" width="345" height="60"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="Female" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ygB-cw-Fci">
+                                                <rect key="frame" x="0.0" y="0.0" width="175" height="60"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="175" id="BUY-HB-pYc"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="25"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="84a-Eh-LeY">
+                                                <rect key="frame" x="175" y="0.0" width="120" height="60"/>
+                                                <connections>
+                                                    <outlet property="dataSource" destination="ueA-1t-3EK" id="v6n-LS-vGN"/>
+                                                    <outlet property="delegate" destination="ueA-1t-3EK" id="vXk-1C-iKO"/>
+                                                </connections>
+                                            </pickerView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="mins" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AV5-b1-edz">
+                                                <rect key="frame" x="295" y="0.0" width="50" height="60"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="60" id="uw3-C7-1Ja"/>
+                                                    <constraint firstAttribute="width" constant="50" id="yts-FC-Fuq"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="AV5-b1-edz" firstAttribute="leading" secondItem="84a-Eh-LeY" secondAttribute="trailing" id="Vuq-Pb-NrD"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.25338692196531792" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="Ldt-cv-Shk" secondAttribute="trailing" constant="5" id="DZG-xu-S9c"/>
+                                    <constraint firstAttribute="bottom" secondItem="Ldt-cv-Shk" secondAttribute="bottom" id="P6X-d6-d76"/>
+                                    <constraint firstItem="Ldt-cv-Shk" firstAttribute="leading" secondItem="VZj-Jn-Nfx" secondAttribute="leading" constant="5" id="aal-xS-lWM"/>
+                                    <constraint firstAttribute="height" constant="60" id="ppT-yD-g5d"/>
+                                    <constraint firstItem="Ldt-cv-Shk" firstAttribute="top" secondItem="VZj-Jn-Nfx" secondAttribute="top" id="xiL-BB-8DK"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.22798612709999999" green="0.73234325649999998" blue="0.92334038019999998" alpha="0.91459760270000001" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="VZj-Jn-Nfx" firstAttribute="leading" secondItem="bbJ-Wh-ViX" secondAttribute="leading" constant="10" id="QYe-gY-pJQ"/>
+                            <constraint firstAttribute="trailing" secondItem="VZj-Jn-Nfx" secondAttribute="trailing" constant="10" id="Rdb-zN-QUz"/>
+                            <constraint firstItem="grf-vt-ciO" firstAttribute="centerX" secondItem="bbJ-Wh-ViX" secondAttribute="centerX" id="Zx6-it-e5Q"/>
+                            <constraint firstItem="VZj-Jn-Nfx" firstAttribute="top" secondItem="grf-vt-ciO" secondAttribute="bottom" constant="25" id="dYh-nl-8hZ"/>
+                            <constraint firstItem="grf-vt-ciO" firstAttribute="top" secondItem="JZP-Z6-Aqc" secondAttribute="bottom" constant="50" id="fwd-Fz-GTc"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="MinutePickerFemale" destination="84a-Eh-LeY" id="l6g-zV-uA5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GwM-Dp-hjT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1508" y="308.09595202398805"/>
         </scene>
     </scenes>
 </document>

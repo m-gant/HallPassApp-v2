@@ -48,3 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+protocol TeacherReferenceDataSource {
+    func getTeacherReference() -> FIRDatabaseReference?
+}
+
