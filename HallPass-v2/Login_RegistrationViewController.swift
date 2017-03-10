@@ -10,12 +10,14 @@ import UIKit
 import QuartzCore
 import Firebase
 
-class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
+class Login_RegistrationViewController: UIViewController, UITextFieldDelegate, TeacherReferenceDataSource {
     
     var loginSelected: Bool = true
     var registrationSelected = false
     var schoolRef: FIRDatabaseReference? = nil
     var dataSource: SchoolReferenceDataSource? = nil
+    let rootRef = FIRDatabase.database().reference()
+    var teacherRef: FIRDatabaseReference? = nil
 
     @IBOutlet weak var Login_RegistrationBtn: UIButton!
     
@@ -32,6 +34,8 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var emailTextField: UITextField!
     
     @IBOutlet weak var containerViewHeight: NSLayoutConstraint!
+    
+    
     
     
     override func viewDidLoad() {
@@ -51,7 +55,7 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
         }
         
         if FIRAuth.auth()?.currentUser?.uid == nil {
-            //TODO: Logout
+            self.dismiss(animated: true, completion: nil)
         }
         
     }
@@ -59,6 +63,13 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return false
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "toMenu") {
+            let menuVC = segue.destination as! MenuViewController
+            menuVC.teacherDataSource = self
+        }
     }
 
     @IBAction func loginFormBtnPressed(_ sender: Any) {
@@ -130,6 +141,7 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
                         guard let userID = user?.uid else {
                             return
                         }
+                        
                         guard let schoolReference = self.schoolRef else {
                             let alert = UIAlertController(title: "Oops", message: "You are not currently affiliated with any school", preferredStyle: .alert)
                             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
@@ -138,9 +150,9 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
                             return
                         }
                         
-                        let teacherRef = schoolReference.child("teachers").child(userID)
+                        self.teacherRef = schoolReference.child("teachers").child(userID)
                         let values = ["name": self.nameTextField.text!, "email": self.emailTextField.text!, "settings": "default", "myStudents":"none"]
-                        teacherRef.updateChildValues(values, withCompletionBlock: { (err, ref) in
+                        self.teacherRef!.updateChildValues(values, withCompletionBlock: { (err, ref) in
                             
                             if err != nil {
                                 alert.title = "Problem with Database Entry"
@@ -149,7 +161,7 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
                                 return
                             }
                             let defaultSettings = ["femaleAttTime": 5, "Att2Time": 5, "Att3Time": 5, "Att4Time": 5]
-                            teacherRef.child("settings").updateChildValues(defaultSettings, withCompletionBlock: { (error, ref) in
+                            self.teacherRef!.child("settings").updateChildValues(defaultSettings, withCompletionBlock: { (error, ref) in
                                 
                                 if (error != nil) {
                                     alert.title = "Problem with Database Entry"
@@ -158,7 +170,7 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
                                 }
                                 
                             })
-                            self.performSegue(withIdentifier: "toNext", sender: self)
+                            self.performSegue(withIdentifier: "toMenu", sender: self)
                         })
                         
                     })
@@ -178,12 +190,23 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
             if (nameTextField.text != "" && emailTextField.text != "") {
                 FIRAuth.auth()?.signIn(withEmail: self.nameTextField.text!, password: self.emailTextField.text!, completion: { (user, err) in
                     
+                    
+                    guard let nonOptUser = user else {
+                        alert.title = "Database Error"
+                        alert.message = "User data corrupted ... Or something like that."
+                        self.present(alert, animated: true, completion: nil)
+                        return
+                    }
+                    let userId = nonOptUser.uid
+                    
                     if err != nil {
                         alert.message = err!.localizedDescription
                         self.present(alert, animated: true, completion: nil)
                         return
                     }
-                    self.performSegue(withIdentifier: "toNext", sender: self)
+                    
+                    self.teacherRef = self.schoolRef!.child("teachers").child(userId)
+                    self.performSegue(withIdentifier: "toMenu", sender: self)
                     
                 })
                 
@@ -196,6 +219,10 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    func getTeacherReference() -> FIRDatabaseReference? {
+        return teacherRef
+    }
+    
     
 
 }
@@ -203,4 +230,5 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate {
 protocol SchoolReferenceDataSource {
     func getSchoolReference() -> FIRDatabaseReference?
 }
+
 

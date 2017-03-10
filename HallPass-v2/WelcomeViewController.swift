@@ -34,7 +34,7 @@ class WelcomeViewController: UIViewController, SchoolReferenceDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         HallPassLabelConstraint.constant -= view.bounds.width
-        rootRef.child("Schools")
+        self.rootRef.child("Schools")
         //for branch
         
     }
@@ -57,11 +57,7 @@ class WelcomeViewController: UIViewController, SchoolReferenceDataSource {
     }
     
     func getSchoolReference() -> FIRDatabaseReference? {
-        if (schoolRef != nil) {
-            return schoolRef!
-        } else {
-            return nil
-        }
+        return schoolRef
     }
     
 
@@ -105,7 +101,7 @@ class WelcomeViewController: UIViewController, SchoolReferenceDataSource {
                 let schoolIdentifier = schoolIdentifierTextField.text!
                 let schoolRef = rootRef.child("Schools").child(schoolIdentifier)
                 self.schoolRef = schoolRef
-                schoolRef.updateChildValues(["schoolName": schoolName], withCompletionBlock: { (error, ref) in
+                schoolRef.updateChildValues(["schoolName": schoolName, "allStudents": "none"], withCompletionBlock: { (error, ref) in
                     
                     if error != nil {
                         alert.title = "Database Entry Error"
@@ -114,6 +110,7 @@ class WelcomeViewController: UIViewController, SchoolReferenceDataSource {
                         return
                     }
                 })
+                self.performSegue(withIdentifier: "toTeacherLogin", sender: self)
                 
             } else {
                 alert.message = "Please fill in all fields."
@@ -126,13 +123,15 @@ class WelcomeViewController: UIViewController, SchoolReferenceDataSource {
                 let schoolsRef = rootRef.child("Schools")
                 schoolsRef.observeSingleEvent(of: .value, with: { (snapshot) in
                     if snapshot.hasChild(schoolIdentifier) {
-                        print("this happened")
+                        self.schoolRef = self.rootRef.child("Schools").child(schoolIdentifier)
+                        self.performSegue(withIdentifier: "toTeacherLogin", sender: self)
                     } else {
-                        //alert
-                        print("this isn't happening")
+                        alert.title = "Oops"
+                        alert.message = "The School identifier you have entered is not in the system"
+                        self.present(alert, animated: true, completion: nil)
                     }
                 })
-                //schoolsRef.o
+                
                 
             } else {
                 alert.message = "Please fill in all fields"

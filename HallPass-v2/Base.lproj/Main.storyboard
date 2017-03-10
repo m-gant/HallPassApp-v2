@@ -141,7 +141,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="maQ-tV-lOE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-834" y="45"/>
+            <point key="canvasLocation" x="-833" y="38"/>
         </scene>
         <!--Login Registration View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -296,16 +296,17 @@
                         <outlet property="nameTextField" destination="Aru-ii-hXp" id="AjZ-g7-7WC"/>
                         <outlet property="passwordTextField" destination="wEw-fY-fA0" id="jut-GI-7XF"/>
                         <outlet property="registrationFormBtn" destination="UgW-pu-vGS" id="ofI-ok-Jma"/>
-                        <segue destination="hKa-ey-ctm" kind="show" identifier="toNext" id="nqb-st-rds"/>
+                        <segue destination="hKa-ey-ctm" kind="show" identifier="toMenu" id="nqb-st-rds"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
         </scene>
-        <!--View Controller-->
+        <!--Menu View Controller-->
         <scene sceneID="MTs-Df-hlG">
             <objects>
-                <viewController id="hKa-ey-ctm" sceneMemberID="viewController">
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iHJ-XM-Ntc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="hKa-ey-ctm" customClass="MenuViewController" customModule="HallPass_v2" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="e8y-IL-h6m"/>
                         <viewControllerLayoutGuide type="bottom" id="u4W-t7-iW6"/>
@@ -314,27 +315,161 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pUy-Q2-9BP">
-                                <rect key="frame" x="170.5" y="318.5" width="34" height="30"/>
-                                <state key="normal" title="back"/>
-                                <connections>
-                                    <segue destination="BYZ-38-t0r" kind="show" id="Ttd-Nj-CiV"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="SHN-ze-WJr">
+                                <rect key="frame" x="40" y="186" width="295" height="295"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="2JA-cP-ARS">
+                                        <rect key="frame" x="0.0" y="0.0" width="295" height="140"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bBj-lO-qbt">
+                                                <rect key="frame" x="0.0" y="0.0" width="140" height="140"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="140" id="7RD-GL-fkB"/>
+                                                    <constraint firstAttribute="width" constant="140" id="Fgz-mN-bJP"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="20"/>
+                                                <state key="normal" title="All Students">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="63"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="70"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="4"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jWl-ts-5ob">
+                                                <rect key="frame" x="155" y="0.0" width="140" height="140"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="140" id="UEv-Wl-4JZ"/>
+                                                    <constraint firstAttribute="width" constant="140" id="WaO-nc-GM6"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="20"/>
+                                                <state key="normal" title="My Students">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="63"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="70"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="4"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="JIv-Hl-4ek">
+                                        <rect key="frame" x="0.0" y="155" width="295" height="140"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5zy-jv-qtv">
+                                                <rect key="frame" x="0.0" y="0.0" width="140" height="140"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="140" id="00D-DF-6il"/>
+                                                    <constraint firstAttribute="height" constant="140" id="bw8-DU-s7B"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="20"/>
+                                                <state key="normal" title="Logout">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="63"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="70"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="4"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="logoutBtnPressed:" destination="hKa-ey-ctm" eventType="touchUpInside" id="iTj-XW-0Sq"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bdm-5C-UUF">
+                                                <rect key="frame" x="155" y="0.0" width="140" height="140"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="140" id="bcZ-Tx-k9j"/>
+                                                    <constraint firstAttribute="height" constant="140" id="qhb-fp-KfU"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="20"/>
+                                                <state key="normal" title="Settings">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="63"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="70"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="4"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello," textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LHf-UB-SGQ">
+                                <rect key="frame" x="82" y="60" width="212" height="71"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="212" id="wEe-er-6fx"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="60"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Teacher Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Cc-aL-VnX">
+                                <rect key="frame" x="31.5" y="136" width="312" height="41.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="312" id="kMH-nn-dzZ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="35"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.22798612709999999" green="0.73234325649999998" blue="0.92334038019999998" alpha="0.91459760270000001" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="pUy-Q2-9BP" firstAttribute="centerX" secondItem="kng-vZ-T7I" secondAttribute="centerX" id="X4c-W1-gVG"/>
-                            <constraint firstItem="pUy-Q2-9BP" firstAttribute="centerY" secondItem="kng-vZ-T7I" secondAttribute="centerY" id="e6f-8H-O2K"/>
+                            <constraint firstItem="6Cc-aL-VnX" firstAttribute="centerX" secondItem="kng-vZ-T7I" secondAttribute="centerX" id="8Sb-OJ-hvO"/>
+                            <constraint firstItem="6Cc-aL-VnX" firstAttribute="top" secondItem="LHf-UB-SGQ" secondAttribute="bottom" constant="5" id="RL6-ko-IrG"/>
+                            <constraint firstItem="LHf-UB-SGQ" firstAttribute="centerX" secondItem="kng-vZ-T7I" secondAttribute="centerX" id="Uao-Yy-Xh9"/>
+                            <constraint firstItem="SHN-ze-WJr" firstAttribute="centerX" secondItem="kng-vZ-T7I" secondAttribute="centerX" id="d4R-Y0-kpF"/>
+                            <constraint firstItem="SHN-ze-WJr" firstAttribute="centerY" secondItem="kng-vZ-T7I" secondAttribute="centerY" id="dem-hq-nz1"/>
+                            <constraint firstItem="LHf-UB-SGQ" firstAttribute="top" secondItem="e8y-IL-h6m" secondAttribute="bottom" constant="40" id="tXH-6H-aS4"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="HelloConstraint" destination="Uao-Yy-Xh9" id="BTY-uj-7mF"/>
+                        <outlet property="TeacherNameConstraint" destination="8Sb-OJ-hvO" id="c5q-Bf-g4j"/>
+                        <outlet property="teacherNameLabel" destination="6Cc-aL-VnX" id="wlJ-Ua-4vP"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="iHJ-XM-Ntc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="785" y="46"/>
+            <point key="canvasLocation" x="800.79999999999995" y="38.23088455772114"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="mJ1-YU-UOi"/>
-    </inferredMetricsTieBreakers>
 </document>
