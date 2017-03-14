@@ -12,9 +12,9 @@ import QuartzCore
 
 class MenuViewController: UIViewController, TeacherReferenceDataSource {
     
-    var schoolRef: FIRDatabaseReference?
+    var schoolRef: FIRDatabaseReference = FIRDatabaseReference()
     var teacherDataSource: TeacherReferenceDataSource?
-    var teacherRef: FIRDatabaseReference?
+    var teacherRef: FIRDatabaseReference = FIRDatabaseReference()
     
 
     @IBOutlet weak var HelloConstraint: NSLayoutConstraint!
@@ -27,29 +27,22 @@ class MenuViewController: UIViewController, TeacherReferenceDataSource {
         HelloConstraint.constant -= self.view.bounds.width
         TeacherNameConstraint.constant -= self.view.bounds.width
         if teacherDataSource != nil {
-            teacherRef = teacherDataSource!.getTeacherReference()
-            schoolRef = teacherRef?.parent
+            guard let nonOptTeacherRef = teacherDataSource!.getTeacherReference() else {
+                let alert = UIAlertController(title: "Oops", message: "We don't know who you are! Please log back in.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                    self.dismiss(animated: true, completion: nil)
+                }))
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            teacherRef = nonOptTeacherRef
+             schoolRef = teacherRef.parent!
             
         } else {
             let alert = UIAlertController(title: "Oops", message: "We don't know who you are! Please log back in.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler:  { action in
                 self.dismiss(animated: true, completion: nil)
             }))
-        }
-        
-        if teacherRef != nil {
-            print(teacherRef)
-            teacherRef!.child("name").observeSingleEvent(of: .value, with: { (snapshot) in
-                if snapshot.exists() {
-                    let value = snapshot.value as! String
-                    self.teacherNameLabel.text = value
-                    print(snapshot.value)
-                } else {
-                    print("something happened")
-                }
-            })
-        } else {
-            print("Bro its null")
         }
         
         // Do any additional setup after loading the view.
@@ -72,6 +65,17 @@ class MenuViewController: UIViewController, TeacherReferenceDataSource {
     
     
     override func viewDidAppear(_ animated: Bool) {
+        teacherRef.child("name").observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.exists() {
+                let value = snapshot.value as! String
+                self.teacherNameLabel.text = value
+                print(snapshot.value)
+            } else {
+                print("something happened")
+            }
+        })
+
+        
         UIView.animate(withDuration: 1) {
             self.HelloConstraint.constant += self.view.bounds.width
             self.view.layoutIfNeeded()
@@ -88,11 +92,13 @@ class MenuViewController: UIViewController, TeacherReferenceDataSource {
         
         do {
            try FIRAuth.auth()?.signOut()
-            self.dismiss(animated: true, completion: nil)
+            self.performSegue(withIdentifier: "backToLogin", sender: self)
         } catch {
             let alert = UIAlertController(title: "Sorry", message: error.localizedDescription, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.dismiss(animated: true, completion: nil)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler:  { action in
+                self.performSegue(withIdentifier: "backToLogin", sender: self)
+            }))
+            self.present(alert, animated: true, completion: nil)
             return
         }
     }

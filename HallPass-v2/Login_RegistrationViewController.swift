@@ -14,7 +14,7 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate, T
     
     var loginSelected: Bool = true
     var registrationSelected = false
-    var schoolRef: FIRDatabaseReference? = nil
+    var schoolRef: FIRDatabaseReference = FIRDatabaseReference()
     var dataSource: SchoolReferenceDataSource? = nil
     let rootRef = FIRDatabase.database().reference()
     var teacherRef: FIRDatabaseReference? = nil
@@ -46,7 +46,16 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate, T
         passwordTextField.delegate = self
         confirmPasswordTextField.delegate = self
         if dataSource != nil {
-            schoolRef = dataSource!.getSchoolReference()
+            guard let nonOptSchoolRef = dataSource!.getSchoolReference() else {
+                let alert = UIAlertController(title: "Oops", message: "We dont know what school you are from! Please re-enter valid school identifier.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                    self.dismiss(animated: true, completion: nil)
+                }))
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            self.schoolRef = nonOptSchoolRef
+
         } else {
             let alert = UIAlertController(title: "Oops", message: "You are not current connected to any school", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {action in
@@ -123,6 +132,9 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate, T
         let alert = UIAlertController(title: "Invalid Entry", message: "something is wrong", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         if registrationSelected {
+            //Registration
+            
+            
             if(nameTextField.text != "" && emailTextField.text != "" && passwordTextField.text != "" && confirmPasswordTextField.text != "") {
                 
                 
@@ -142,15 +154,8 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate, T
                             return
                         }
                         
-                        guard let schoolReference = self.schoolRef else {
-                            let alert = UIAlertController(title: "Oops", message: "You are not currently affiliated with any school", preferredStyle: .alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
-                                self.dismiss(animated: true, completion: nil)
-                            }))
-                            return
-                        }
                         
-                        self.teacherRef = schoolReference.child("teachers").child(userID)
+                        self.teacherRef = self.schoolRef.child("teachers").child(userID)
                         let values = ["name": self.nameTextField.text!, "email": self.emailTextField.text!, "settings": "default", "myStudents":"none"]
                         self.teacherRef!.updateChildValues(values, withCompletionBlock: { (err, ref) in
                             
@@ -187,17 +192,11 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate, T
                 self.present(alert, animated: true, completion: nil)
             }
         } else {
+            //Login
+            
+            
             if (nameTextField.text != "" && emailTextField.text != "") {
                 FIRAuth.auth()?.signIn(withEmail: self.nameTextField.text!, password: self.emailTextField.text!, completion: { (user, err) in
-                    
-                    
-                    guard let nonOptUser = user else {
-                        alert.title = "Database Error"
-                        alert.message = "User data corrupted ... Or something like that."
-                        self.present(alert, animated: true, completion: nil)
-                        return
-                    }
-                    let userId = nonOptUser.uid
                     
                     if err != nil {
                         alert.message = err!.localizedDescription
@@ -205,8 +204,27 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate, T
                         return
                     }
                     
-                    self.teacherRef = self.schoolRef!.child("teachers").child(userId)
-                    self.performSegue(withIdentifier: "toMenu", sender: self)
+                    guard let nonOptUser = user else {
+                        alert.title = "Database Error"
+                        alert.message = "The user you are trying to sign-in is not in the system."
+                        self.present(alert, animated: true, completion: nil)
+                        return
+                    }
+                    let userId = nonOptUser.uid
+                    
+                    
+                    self.schoolRef.child("teachers").observeSingleEvent(of: .value, with: { (snapshot) in
+                        if snapshot.hasChild(userId) {
+                            self.teacherRef = self.schoolRef.child("teachers").child(userId)
+                            self.performSegue(withIdentifier: "toMenu", sender: self)
+
+                        } else {
+                            alert.title = "Invalid Login"
+                            alert.message = "The login information inputted does not match the school identifier in the system. Please log in with the correct School Identifier."
+                            self.present(alert, animated: true, completion: nil)
+                        }
+                    })
+                    
                     
                 })
                 

@@ -11,20 +11,34 @@ import Firebase
 
 class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    var teacherRef: FIRDatabaseReference?
+    var teacherRef: FIRDatabaseReference = FIRDatabaseReference()
     var teacherDataSource: TeacherReferenceDataSource?
     let minutes: [Int] = [Int](1...60)
     var minutesString : [String]?
     
 
     @IBOutlet weak var MinutePickerFemale: UIPickerView!
+    @IBOutlet weak var MinutePickerAtt1: UIPickerView!
+    @IBOutlet weak var MinutePickerAtt2: UIPickerView!
+    @IBOutlet weak var MinutePickerAtt3: UIPickerView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if teacherDataSource != nil
-        {
-            teacherRef = teacherDataSource?.getTeacherReference()
+        if teacherDataSource != nil {
+            
+            
+            guard let nonOptTeacherRef =  teacherDataSource!.getTeacherReference() else {
+                let alert = UIAlertController(title: "Oops", message: "We don't know who you are! Please log back in.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                    self.dismiss(animated: true, completion: nil)
+                }))
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            
+            teacherRef = nonOptTeacherRef
+            
         } else {
             let alert = UIAlertController(title: "Oops", message: "It appears we don't know who you are. Please log back in. ", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
@@ -43,6 +57,9 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
             String($0)
         }
         MinutePickerFemale.tag  = 0
+        MinutePickerAtt1.tag = 1
+        MinutePickerAtt2.tag = 2
+        MinutePickerAtt3.tag = 3
         
     }
     
@@ -52,12 +69,14 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
-        let settingsRef = teacherRef!.child("settings")
+        print(teacherRef)
+        
+        let settingsRef = teacherRef.child("settings")
         
         
         switch pickerView.tag {
         case 0:
-            settingsRef.updateChildValues(["femaleAttTime": minutesString![row]])
+            settingsRef.child("femaleAttTime").setValue(minutesString![row])
         case 1:
             settingsRef.updateChildValues(["Att1Time":minutesString![row]])
         case 2:
