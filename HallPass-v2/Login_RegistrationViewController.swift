@@ -15,10 +15,13 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate, T
     var loginSelected: Bool = true
     var registrationSelected = false
     var schoolRef: FIRDatabaseReference = FIRDatabaseReference()
-    var dataSource: SchoolReferenceDataSource? = nil
+    var welcomeVC: SchoolReferenceDataSource?
     let rootRef = FIRDatabase.database().reference()
     var teacherRef: FIRDatabaseReference? = nil
+    var originalEffect: UIVisualEffect!
 
+    @IBOutlet weak var login_registrationContainer: UIView!
+    @IBOutlet weak var Blur: UIVisualEffectView!
     @IBOutlet weak var Login_RegistrationBtn: UIButton!
     
     @IBOutlet weak var containerView: UIView!
@@ -36,17 +39,27 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate, T
     @IBOutlet weak var containerViewHeight: NSLayoutConstraint!
     
     
+    @IBOutlet weak var distanceFromLogRegFormBtns: NSLayoutConstraint!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        originalEffect = Blur.effect
+        Blur.effect = nil
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+
         emailTextField.isSecureTextEntry = true
         nameTextField.delegate = self
         emailTextField.delegate = self
         passwordTextField.delegate = self
         confirmPasswordTextField.delegate = self
-        if dataSource != nil {
-            guard let nonOptSchoolRef = dataSource!.getSchoolReference() else {
+        if welcomeVC != nil {
+            guard let nonOptSchoolRef = welcomeVC!.getSchoolReference() else {
                 let alert = UIAlertController(title: "Oops", message: "We dont know what school you are from! Please re-enter valid school identifier.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
                     self.dismiss(animated: true, completion: nil)
@@ -241,7 +254,35 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate, T
         return teacherRef
     }
     
+    @IBAction func backToWelcomeBtnPressed(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
+    }
     
+    
+    func keyboardWillShow(notification: NSNotification) {
+        self.view.bringSubview(toFront: Blur)
+        self.view.bringSubview(toFront: login_registrationContainer)
+        
+        UIView.animate(withDuration: 1, animations: { 
+            self.distanceFromLogRegFormBtns.constant = -10
+            self.Blur.effect = self.originalEffect
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+    }
+    
+    func keyboardWillHide (notification: NSNotification) {
+        UIView.animate(withDuration: 1, animations: {
+            self.distanceFromLogRegFormBtns.constant = 20
+            self.view.layoutIfNeeded()
+        }) { (_) in
+            UIView.animate(withDuration: 0.25, animations: { 
+                self.Blur.effect = nil
+                self.view.layoutIfNeeded()
+            }, completion: { (_) in
+                self.view.sendSubview(toBack: self.Blur)
+            })
+        }
+    }
 
 }
 

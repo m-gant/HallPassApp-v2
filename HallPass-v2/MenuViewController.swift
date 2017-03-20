@@ -16,6 +16,7 @@ class MenuViewController: UIViewController, TeacherReferenceDataSource {
     var teacherDataSource: TeacherReferenceDataSource?
     var teacherRef: FIRDatabaseReference = FIRDatabaseReference()
     
+    @IBOutlet weak var HelloLabel: UILabel!
 
     @IBOutlet weak var HelloConstraint: NSLayoutConstraint!
     @IBOutlet weak var TeacherNameConstraint: NSLayoutConstraint!
@@ -24,8 +25,7 @@ class MenuViewController: UIViewController, TeacherReferenceDataSource {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        HelloConstraint.constant -= self.view.bounds.width
-        TeacherNameConstraint.constant -= self.view.bounds.width
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         if teacherDataSource != nil {
             guard let nonOptTeacherRef = teacherDataSource!.getTeacherReference() else {
                 let alert = UIAlertController(title: "Oops", message: "We don't know who you are! Please log back in.", preferredStyle: .alert)
@@ -37,6 +37,11 @@ class MenuViewController: UIViewController, TeacherReferenceDataSource {
             }
             teacherRef = nonOptTeacherRef
              schoolRef = teacherRef.parent!
+            teacherRef.child("name").observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.exists() {
+                    self.teacherNameLabel.text = snapshot.value as! String
+                }
+            })
             
         } else {
             let alert = UIAlertController(title: "Oops", message: "We don't know who you are! Please log back in.", preferredStyle: .alert)
@@ -52,6 +57,10 @@ class MenuViewController: UIViewController, TeacherReferenceDataSource {
         if segue.identifier == "toSettings" {
             let settingsVC = segue.destination as! SettingsViewController
             settingsVC.teacherDataSource = self
+            print("prepare for segue occurs")
+        } else if segue.identifier == "toMyStudents" {
+            let myStudentsVC = segue.destination as! MyStudentVC
+            myStudentsVC.teacherRef = self.teacherRef
         } else {
             super.prepare(for: segue, sender: self)
         }
@@ -65,26 +74,15 @@ class MenuViewController: UIViewController, TeacherReferenceDataSource {
     
     
     override func viewDidAppear(_ animated: Bool) {
-        teacherRef.child("name").observeSingleEvent(of: .value, with: { (snapshot) in
-            if snapshot.exists() {
-                let value = snapshot.value as! String
-                self.teacherNameLabel.text = value
-                print(snapshot.value)
-            } else {
-                print("something happened")
-            }
-        })
-
+        HelloLabel.frame.origin.x -= self.view.bounds.width
+        teacherNameLabel.frame.origin.x -= self.view.bounds.width
         
-        UIView.animate(withDuration: 1) {
-            self.HelloConstraint.constant += self.view.bounds.width
-            self.view.layoutIfNeeded()
-        }
-        UIView.animate(withDuration: 1, delay: 0.25, options: .curveEaseOut, animations: {
-            self.TeacherNameConstraint.constant += self.view.bounds.width
-            self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 1, animations: { 
+            self.HelloLabel.frame.origin.x += self.view.bounds.width
         }, completion: nil)
-        
+        UIView.animate(withDuration: 1, delay: 0.25, options: .curveLinear, animations: { 
+            self.teacherNameLabel.frame.origin.x += self.view.bounds.width
+        }, completion: nil)
 
     }
 
@@ -92,7 +90,12 @@ class MenuViewController: UIViewController, TeacherReferenceDataSource {
         
         do {
            try FIRAuth.auth()?.signOut()
-            self.performSegue(withIdentifier: "backToLogin", sender: self)
+            //self.performSegue(withIdentifier: "backToLogin", sender: self)
+            for viewController in self.navigationController!.viewControllers {
+                if let vc = viewController as? WelcomeViewController {
+                    self.navigationController?.popToViewController(vc, animated: true)
+                }
+            }
         } catch {
             let alert = UIAlertController(title: "Sorry", message: error.localizedDescription, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler:  { action in

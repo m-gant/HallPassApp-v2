@@ -24,6 +24,7 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         if teacherDataSource != nil {
             
@@ -61,6 +62,17 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         MinutePickerAtt2.tag = 2
         MinutePickerAtt3.tag = 3
         
+        teacherRef.child("settings").observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.exists() {
+                let settingsData = snapshot.value as! [String: Int]
+                self.MinutePickerFemale.selectRow(settingsData["femaleAttTime"]! - 1, inComponent: 0, animated: false)
+                self.MinutePickerAtt1.selectRow(settingsData["Att1Time"]! - 1, inComponent: 0, animated: false)
+                self.MinutePickerAtt2.selectRow(settingsData["Att2Time"]! - 1, inComponent: 0, animated: false)
+                self.MinutePickerAtt3.selectRow(settingsData["Att3Time"]! - 1, inComponent: 0, animated: false)
+                
+            }
+        })
+        
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
@@ -76,13 +88,13 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         
         switch pickerView.tag {
         case 0:
-            settingsRef.child("femaleAttTime").setValue(minutesString![row])
+            settingsRef.child("femaleAttTime").setValue(minutes[row])
         case 1:
-            settingsRef.updateChildValues(["Att1Time":minutesString![row]])
+            settingsRef.updateChildValues(["Att1Time":minutes[row]])
         case 2:
-            settingsRef.updateChildValues(["Att2Time" : minutesString![row]])
+            settingsRef.updateChildValues(["Att2Time" : minutes[row]])
         case 3:
-            settingsRef.updateChildValues(["Att3Time" : minutesString![row]])
+            settingsRef.updateChildValues(["Att3Time" : minutes[row]])
         default: break
             //do nothing
             
@@ -106,6 +118,10 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         return theFinalTitle
     }
     
+    @IBAction func backToMenuBtnPressed(_ sender: Any) {
+        
+        self.navigationController?.popViewController(animated: true)
+    }
     
 
     

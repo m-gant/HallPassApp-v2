@@ -9,20 +9,27 @@
 import UIKit
 import Firebase
 
-class WelcomeViewController: UIViewController, SchoolReferenceDataSource {
+class WelcomeViewController: UIViewController, SchoolReferenceDataSource, UITextFieldDelegate {
     
     let rootRef = FIRDatabase.database().reference()
 
+    @IBOutlet weak var schoolLoginView: UIView!
     
+    @IBOutlet weak var HallPassLabel: UILabel!
+    @IBOutlet weak var Blur: UIVisualEffectView!
     
     @IBOutlet weak var HallPassLabelConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerViewFormHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var distanceFromSignInFormBtn: NSLayoutConstraint!
     
     @IBOutlet weak var schoolNameTextField: UITextField!
     
     @IBOutlet weak var schoolIdentifierTextField: UITextField!
     
     @IBOutlet weak var Register_SignInBtn: UIButton!
+    
+    var originalEffect : UIVisualEffect!
     
     var registerNewSchool: Bool = true
     
@@ -33,16 +40,23 @@ class WelcomeViewController: UIViewController, SchoolReferenceDataSource {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        HallPassLabelConstraint.constant -= view.bounds.width
-        self.rootRef.child("Schools")
-        //for branch
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        originalEffect = Blur.effect
+        Blur.effect = nil
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyBoardWasLaunched(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        
+        schoolNameTextField.delegate = self
+        schoolIdentifierTextField.delegate = self
         
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
+        //super.viewDidAppear(true)
+        self.HallPassLabel.frame.origin.x -= self.view.bounds.width
         UIView.animate(withDuration: 1, delay: 0, options: .curveEaseOut, animations: {
-            self.HallPassLabelConstraint.constant += self.view.bounds.width
+            
+            self.HallPassLabel.frame.origin.x =  0
             self.view.layoutIfNeeded()
         }, completion: nil)
     }
@@ -50,7 +64,7 @@ class WelcomeViewController: UIViewController, SchoolReferenceDataSource {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toTeacherLogin" {
             let destinationController = segue.destination as! Login_RegistrationViewController
-            destinationController.dataSource = self
+            destinationController.welcomeVC = self
         } else {
             super.prepare(for: segue, sender: self)
         }
@@ -138,6 +152,40 @@ class WelcomeViewController: UIViewController, SchoolReferenceDataSource {
                 self.present(alert, animated: true, completion: nil)
             }
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        UIView.animate(withDuration: 0.5, animations: {
+            self.distanceFromSignInFormBtn.constant = 20
+            self.view.layoutIfNeeded()
+        }) { (_) in
+            UIView.animate(withDuration: 0.25, animations: {
+                self.Blur.effect = nil
+                self.view.layoutIfNeeded()
+            }, completion: { (_) in
+                self.view.sendSubview(toBack: self.Blur)
+            })
+        }
+        
+        return false
+    }
+    
+    func animateUp() {
+        UIView.animate(withDuration: 3) {
+            self.distanceFromSignInFormBtn.constant = -70
+            self.Blur.effect = self.originalEffect
+            //self.view.layoutSubviews()
+            self.view.layoutIfNeeded()
+        }
+
+    }
+    
+    func keyBoardWasLaunched(notification: NSNotification) {
+        self.view.bringSubview(toFront: Blur)
+        //self.view.bringSubview(toFront: Register_SignInBtn)
+        self.view.bringSubview(toFront: self.schoolLoginView)
+        animateUp()
     }
     
 }
