@@ -75,6 +75,10 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return minutes.count
     }

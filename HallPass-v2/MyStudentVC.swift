@@ -13,6 +13,7 @@ class MyStudentVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
     
     var studentList:[Student] = []
     var teacherRef: FIRDatabaseReference?
+    var selectedStudent: Student?
 
     @IBOutlet weak var myStudentsTBLV: UITableView!
     override func viewDidLoad() {
@@ -40,13 +41,14 @@ class MyStudentVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
                 let studentMC = studentInfo["monthCount"] as! Int
                 let studentTC = studentInfo["totalCount"] as! Int
                 let studentHP = studentInfo["hasPass"] as! Bool
+                let studentDM = studentInfo["demerits"] as! Int
                 let studentsAtts = studentInfo["attributes"] as! [String: Bool]
                 var studentAttArr: [Bool] = [false, false, false, false]
                 studentAttArr[0] = studentsAtts["femaleAtt"]!
                 studentAttArr[1] = studentsAtts["Att1"]!
                 studentAttArr[2] = studentsAtts["Att2"]!
                 studentAttArr[3] = studentsAtts["Att3"]!
-                let newStudent = Student(firstName: studentFN, lastName: studentLN, weekCount: studentWC, monthCount: studentMC, totalCount: studentTC, attributes: studentAttArr, hasPass: studentHP)
+                let newStudent = Student(firstName: studentFN, lastName: studentLN, weekCount: studentWC, monthCount: studentMC, totalCount: studentTC, attributes: studentAttArr, hasPass: studentHP, uid: snapshot.key)
                 self.studentList.append(newStudent)
 
             }
@@ -63,6 +65,11 @@ class MyStudentVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         if segue.identifier == "toNewStudent" {
             let newStudentVC = segue.destination as! NewStudentVC
             newStudentVC.teacherRef = self.teacherRef
+        } else if segue.identifier == "toStudentInfo" {
+            let studentInfoVC = segue.destination as! StudentInfoVC
+            studentInfoVC.student = selectedStudent
+            studentInfoVC.teacherRef = teacherRef!
+            
         } else {
             super.prepare(for: segue, sender: self)
         }
@@ -107,6 +114,23 @@ class MyStudentVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         return view
     }
     
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .normal, title: "Delete") { (action, index) in
+            let studentToDel = self.studentList[index.row]
+            let studentRef = self.teacherRef!.child("myStudents").child(studentToDel.UID)
+            studentRef.setValue(nil)
+            self.studentList.remove(at: index.row)
+            tableView.deleteRows(at: [index], with: .fade)
+        }
+        delete.backgroundColor = .red
+        return [delete]
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedStudent = studentList[indexPath.row]
+        self.performSegue(withIdentifier: "toStudentInfo", sender: self)
+    }
+    
 
 }
 
@@ -120,9 +144,11 @@ class Student {
     var weekCount: Int
     var monthCount: Int
     var totalCount: Int
+    var UID: String
+    var demerits: Int
     
-    init(firstName FN: String, lastName LN: String, weekCount WC: Int, monthCount MC: Int, totalCount TC: Int, attributes Atts: [Bool], hasPass HP: Bool) {
-        firstName = FN; lastName = LN; weekCount = WC; monthCount = MC; totalCount = TC; attributes = Atts; hasHallPass = HP
+    init(firstName FN: String, lastName LN: String, weekCount WC: Int, monthCount MC: Int, totalCount TC: Int, attributes Atts: [Bool], hasPass HP: Bool, uid: String, demerits DM: Int) {
+        firstName = FN; lastName = LN; weekCount = WC; monthCount = MC; totalCount = TC; attributes = Atts; hasHallPass = HP; UID = uid; demerits = DM
         
         
     }

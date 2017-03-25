@@ -53,6 +53,7 @@ class WelcomeViewController: UIViewController, SchoolReferenceDataSource, UIText
     
     override func viewDidAppear(_ animated: Bool) {
         //super.viewDidAppear(true)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.HallPassLabel.frame.origin.x -= self.view.bounds.width
         UIView.animate(withDuration: 1, delay: 0, options: .curveEaseOut, animations: {
             

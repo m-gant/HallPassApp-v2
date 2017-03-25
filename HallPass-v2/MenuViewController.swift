@@ -74,6 +74,7 @@ class MenuViewController: UIViewController, TeacherReferenceDataSource {
     
     
     override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         HelloLabel.frame.origin.x -= self.view.bounds.width
         teacherNameLabel.frame.origin.x -= self.view.bounds.width
         

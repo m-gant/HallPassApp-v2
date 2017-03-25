@@ -81,6 +81,10 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate, T
         }
         
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -229,6 +233,27 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate, T
                     self.schoolRef.child("teachers").observeSingleEvent(of: .value, with: { (snapshot) in
                         if snapshot.hasChild(userId) {
                             self.teacherRef = self.schoolRef.child("teachers").child(userId)
+                            
+                            //If firebase functions doesn't work
+//                            let today = Date()
+//                            let calendar = Calendar.current
+//                            let curMonth = calendar.component(.month, from: today)
+//                            let unixDate = Int(today.timeIntervalSince1970) * 1000
+//                            self.rootRef.child("timeInfo").observeSingleEvent(of: .value, with: { (snapshot) in
+//                                if snapshot.exists() {
+//                                    let updateTimes = snapshot.value! as! [String: Int]
+//                                    if unixDate >= updateTimes["week"]! {
+//                                        var nextWeek = updateTimes["week"]!
+//                                        while unixDate >= nextWeek {
+//                                            nextWeek += 604800000
+//                                        }
+//                                        self.rootRef.child("timeInfo").child("nextWeek").setValue(nextWeek)
+//                                        
+//                                    }
+//                                } else {
+//                                    print("there was an error with the time info")
+//                                }
+//                            })
                             self.performSegue(withIdentifier: "toMenu", sender: self)
 
                         } else {
