@@ -48,7 +48,7 @@ class MyStudentVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
                 studentAttArr[1] = studentsAtts["Att1"]!
                 studentAttArr[2] = studentsAtts["Att2"]!
                 studentAttArr[3] = studentsAtts["Att3"]!
-                let newStudent = Student(firstName: studentFN, lastName: studentLN, weekCount: studentWC, monthCount: studentMC, totalCount: studentTC, attributes: studentAttArr, hasPass: studentHP, uid: snapshot.key)
+                let newStudent = Student(firstName: studentFN, lastName: studentLN, weekCount: studentWC, monthCount: studentMC, totalCount: studentTC, attributes: studentAttArr, hasPass: studentHP, uid: snapshot.key, demerits: studentDM)
                 self.studentList.append(newStudent)
 
             }
@@ -59,6 +59,10 @@ class MyStudentVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         
 
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.myStudentsTBLV.reloadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -91,19 +95,23 @@ class MyStudentVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         cell.studentNameLabel.text = studentName
         let attributes = cell.student.attributes
         cell.attsLabel.text = ""
-        if attributes[0] {
-            cell.attsLabel.text = "👱‍♀️ \(cell.attsLabel.text!)"
+        if cell.student.hasHallPass == true {
+            cell.attsLabel.text = "OUT"
+        } else {
+            if attributes[0] {
+                cell.attsLabel.text = "👱‍♀️ \(cell.attsLabel.text!)"
+            }
+            if attributes[1] {
+                cell.attsLabel.text = "1️⃣ \(cell.attsLabel.text!)"
+            }
+            if attributes[2] {
+                cell.attsLabel.text = "2️⃣ \(cell.attsLabel.text!)"
+            }
+            if attributes[3] {
+                cell.attsLabel.text = "3️⃣ \(cell.attsLabel.text!)"
+            }
         }
-        if attributes[1] {
-            cell.attsLabel.text = "1️⃣ \(cell.attsLabel.text!)"
-        }
-        if attributes[2] {
-            cell.attsLabel.text = "2️⃣ \(cell.attsLabel.text!)"
-        }
-        if attributes[3] {
-            cell.attsLabel.text = "3️⃣ \(cell.attsLabel.text!)"
-        }
-        cell.backgroundColor = UIColor.clear
+                cell.backgroundColor = UIColor.clear
         return cell
     }
     

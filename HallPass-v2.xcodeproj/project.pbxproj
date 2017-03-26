@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		194359791E8773E9003C00F6 /* AllStudentsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194359781E8773E9003C00F6 /* AllStudentsVC.swift */; };
+		1943597B1E87874B003C00F6 /* StudentInfoASVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1943597A1E87874B003C00F6 /* StudentInfoASVC.swift */; };
 		1944F9DE1E6F9FB2000F5776 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1944F9DD1E6F9FB2000F5776 /* AppDelegate.swift */; };
 		1944F9E01E6F9FB2000F5776 /* Login_RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1944F9DF1E6F9FB2000F5776 /* Login_RegistrationViewController.swift */; };
 		1944F9E31E6F9FB2000F5776 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1944F9E11E6F9FB2000F5776 /* Main.storyboard */; };
@@ -25,6 +27,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		194359781E8773E9003C00F6 /* AllStudentsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllStudentsVC.swift; sourceTree = "<group>"; };
+		1943597A1E87874B003C00F6 /* StudentInfoASVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentInfoASVC.swift; sourceTree = "<group>"; };
 		1944F9DA1E6F9FB2000F5776 /* HallPass-v2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HallPass-v2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1944F9DD1E6F9FB2000F5776 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1944F9DF1E6F9FB2000F5776 /* Login_RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login_RegistrationViewController.swift; sourceTree = "<group>"; };
@@ -86,6 +90,8 @@
 				19E56C761E72EBD900315F47 /* SettingsViewController.swift */,
 				19E56C981E7E186E00315F47 /* MyStudentVC.swift */,
 				19E56C9A1E7E2E1700315F47 /* StudentCell.swift */,
+				194359781E8773E9003C00F6 /* AllStudentsVC.swift */,
+				1943597A1E87874B003C00F6 /* StudentInfoASVC.swift */,
 				19E56C9C1E7E67DC00315F47 /* NewStudentVC.swift */,
 				19E56C9E1E8224C300315F47 /* StudentInfoVC.swift */,
 				19E56CA01E8234C300315F47 /* PassLog.swift */,
@@ -239,8 +245,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1943597B1E87874B003C00F6 /* StudentInfoASVC.swift in Sources */,
 				19E56C991E7E186F00315F47 /* MyStudentVC.swift in Sources */,
 				1944F9F21E708038000F5776 /* WelcomeViewController.swift in Sources */,
+				194359791E8773E9003C00F6 /* AllStudentsVC.swift in Sources */,
 				1944F9E01E6F9FB2000F5776 /* Login_RegistrationViewController.swift in Sources */,
 				19E56CA11E8234C300315F47 /* PassLog.swift in Sources */,
 				1944F9DE1E6F9FB2000F5776 /* AppDelegate.swift in Sources */,

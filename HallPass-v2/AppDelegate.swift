@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,7 +20,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        let closeWithDemerit = UNNotificationAction(identifier: "CWD", title: "Close Pass With Demerit", options: [.destructive])
+        
+        let closeWithoutDemerit = UNNotificationAction(identifier: "CWOD", title: "Close Pass W/out Demerit", options: [.destructive])
+        let category: UNNotificationCategory = UNNotificationCategory(identifier: "first_category", actions: [closeWithDemerit, closeWithoutDemerit], intentIdentifiers: [], options: [])
+        let categories = NSSet(object: category)
+        
+        let mySettings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: categories as! Set<UIUserNotificationCategory>)
+        
+        
+        UIApplication.shared.registerUserNotificationSettings(mySettings)
         return true
     }
 

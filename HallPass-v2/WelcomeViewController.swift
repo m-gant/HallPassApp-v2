@@ -133,7 +133,12 @@ class WelcomeViewController: UIViewController, SchoolReferenceDataSource, UIText
             }
             
         } else {
-            if (schoolNameTextField.text != "") {
+            if (schoolNameTextField.text != ""
+                && !schoolNameTextField.text!.contains(".")
+                && !schoolNameTextField.text!.contains("#")
+                && !schoolNameTextField.text!.contains("$")
+                && !schoolNameTextField.text!.contains("[")
+                && !schoolNameTextField.text!.contains("]")) {
                 let schoolIdentifier = schoolNameTextField.text!
                 let schoolsRef = rootRef.child("Schools")
                 schoolsRef.observeSingleEvent(of: .value, with: { (snapshot) in

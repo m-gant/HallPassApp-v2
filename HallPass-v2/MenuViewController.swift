@@ -61,6 +61,9 @@ class MenuViewController: UIViewController, TeacherReferenceDataSource {
         } else if segue.identifier == "toMyStudents" {
             let myStudentsVC = segue.destination as! MyStudentVC
             myStudentsVC.teacherRef = self.teacherRef
+        } else if segue.identifier == "toAllStudents" {
+            let allStudentsVC = segue.destination as! AllStudentsVC
+            allStudentsVC.teacherRef = self.teacherRef
         } else {
             super.prepare(for: segue, sender: self)
         }
@@ -107,6 +110,11 @@ class MenuViewController: UIViewController, TeacherReferenceDataSource {
         }
     }
     
+    @IBAction func allStudentsBtn(_ sender: Any) {
+        
+        self.performSegue(withIdentifier: "toAllStudents", sender: sender)
+        
+    }
    
 
 }

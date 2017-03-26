@@ -182,7 +182,7 @@ class Login_RegistrationViewController: UIViewController, UITextFieldDelegate, T
                                 self.present(alert, animated: true, completion: nil)
                                 return
                             }
-                            let defaultSettings = ["femaleAttTime": 5, "Att2Time": 5, "Att3Time": 5, "Att4Time": 5]
+                            let defaultSettings = ["femaleAttTime": 5, "Att2Time": 5, "Att3Time": 5, "Att4Time": 5, "Att1Time": 5]
                             self.teacherRef!.child("settings").updateChildValues(defaultSettings, withCompletionBlock: { (error, ref) in
                                 
                                 if (error != nil) {
